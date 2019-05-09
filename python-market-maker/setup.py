@@ -7,7 +7,7 @@ with open('README.md', 'rt') as f:
 
 setup(
     name='deribit_example_marketmaker',
-    version='1.0.0',
+    version='1.0.1',
     description='An example market maker for Deribit',
     long_description=long_description,
     long_description_content_type='text/markdown',

@@ -154,7 +154,8 @@ class MarketMaker( object ):
         self.futures_prv    = cp.deepcopy( self.futures )
         insts               = self.client.getinstruments()
         self.futures        = sort_by_key( { 
-            i[ 'instrumentName' ]: i for i in insts  if i[ 'kind' ] == 'future' 
+            i[ 'instrumentName' ]: i for i in insts
+            if i[ 'kind' ] == 'future' and i[ 'baseCurrency' ] == 'BTC'
         } )
         
         for k, v in self.futures.items():
@@ -334,11 +335,11 @@ class MarketMaker( object ):
                             try:
                                 self.client.buy(  fut, qty, prc, 'true' )
                                 cancel_oids.append( oid )
-                                self.logger.warn( 'Edit failed for %s' % oid )
+                                self.logger.warning( 'Edit failed for %s' % oid )
                             except (SystemExit, KeyboardInterrupt):
                                 raise
                             except Exception as e:
-                                self.logger.warn( 'Bid order failed: %s bid for %s'
+                                self.logger.warning( 'Bid order failed: %s bid for %s'
                                                 % ( prc, qty ))
                     else:
                         try:
@@ -346,7 +347,7 @@ class MarketMaker( object ):
                         except (SystemExit, KeyboardInterrupt):
                             raise
                         except Exception as e:
-                            self.logger.warn( 'Bid order failed: %s bid for %s'
+                            self.logger.warning( 'Bid order failed: %s bid for %s'
                                                 % ( prc, qty ))
 
                 # OFFERS
@@ -370,11 +371,11 @@ class MarketMaker( object ):
                             try:
                                 self.client.sell( fut, qty, prc, 'true' )
                                 cancel_oids.append( oid )
-                                self.logger.warn( 'Sell Edit failed for %s' % oid )
+                                self.logger.warning( 'Sell Edit failed for %s' % oid )
                             except (SystemExit, KeyboardInterrupt):
                                 raise
                             except Exception as e:
-                                self.logger.warn( 'Offer order failed: %s at %s'
+                                self.logger.warning( 'Offer order failed: %s at %s'
                                                 % ( qty, prc ))
 
                     else:
@@ -383,7 +384,7 @@ class MarketMaker( object ):
                         except (SystemExit, KeyboardInterrupt):
                             raise
                         except Exception as e:
-                            self.logger.warn( 'Offer order failed: %s at %s'
+                            self.logger.warning( 'Offer order failed: %s at %s'
                                                 % ( qty, prc ))
 
 
@@ -395,7 +396,7 @@ class MarketMaker( object ):
                 try:
                     self.client.cancel( oid )
                 except:
-                    self.logger.warn( 'Order cancellations failed: %s' % oid )
+                    self.logger.warning( 'Order cancellations failed: %s' % oid )
                                         
     
     def restart( self ):        
